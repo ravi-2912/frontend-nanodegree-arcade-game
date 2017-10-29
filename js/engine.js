@@ -79,7 +79,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
     }
 
     /* This is called by the update function and loops through all of the
@@ -96,6 +96,20 @@ var Engine = (function(global) {
         player.update(dt);
     }
 
+    /* This checks collision between players and enemies and collectibles,
+     * using bounding box algorith. 
+     */
+    function checkCollisions() {
+        allEnemies.forEach (function (enemy) {
+            if (enemy.row === (player.row )) {
+                var dist = player.x - enemy.x;
+                if (dist < 90 && dist > 0) {
+                    player.reset();
+                }
+            }
+        });
+    }
+
     /* This function initially draws the "game level", it will then call
      * the renderEntities function. Remember, this function is called every
      * game tick (or loop of the game engine) because that's how games work -
@@ -106,6 +120,8 @@ var Engine = (function(global) {
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */
+        ctx.fillStyle = "#1f1f1f";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         var rowImages = [
                 "images/water-block.png",   // Top row is water
                 "images/stone-block.png",   // Row 1 of 3 of stone
