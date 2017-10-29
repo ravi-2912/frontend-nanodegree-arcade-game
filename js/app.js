@@ -55,15 +55,27 @@ Player.prototype.handleInput = function (keyCode) {
     switch(keyCode) {
         case "left":
             this.col--;
+            if(this.col < 1) {
+                this.col = 1;
+            }
             break;
         case "right":
             this.col++;
+            if(this.col > 5) {
+                this.col = 5;
+            }
             break;
         case "up":
             this.row--;
+            if(this.row < 0) {
+                this.row = 0;
+            }
             break;
         case "down":
             this.row++;
+            if(this.row > 5) {
+                this.row = 5;
+            }
             break;
     }
 };
@@ -76,12 +88,8 @@ Player.prototype.update = function(dt) {
     var new_x   = (this.col - 1) * 101,
         new_y   = (this.row - 1) * 83 + 60;
 
-    if (this.col <= 5 && this.col >= 1) {
-        this.x += (new_x - this.x) * dt * this.vel;
-    }
-    if (this.row <= 6 && this.row >= 1) {
-        this.y += (new_y - this.y) * dt * this.vel;
-    }
+    this.x += (new_x - this.x) * dt * this.vel;
+    this.y += (new_y - this.y) * dt * this.vel;
 };
 
 
