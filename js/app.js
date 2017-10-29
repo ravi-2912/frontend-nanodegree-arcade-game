@@ -9,7 +9,7 @@ var Character = function(sprite, vel = 50, row = 1, col = 1) {
     this.col = col;
     this.row = row;
     this.x = (this.col - 1) * 101;
-    this.y = (this.row - 1) * 83 + 60;
+    this.y = (this.row - 1) * 83 - 20;
 };
 
 // Update the character's position, required method for game
@@ -43,7 +43,8 @@ var Player = function () {
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-    Character.call(this, "images/char-boy.png", 4, 5, 3);
+    Character.call(this, "images/char-boy.png", 4, 6, 3);
+    this.y = (this.row - 1) * 83 - 20;
 };
 
 // Map Character prototypes to Player
@@ -67,14 +68,14 @@ Player.prototype.handleInput = function (keyCode) {
             break;
         case "up":
             this.row--;
-            if(this.row < 0) {
-                this.row = 0;
+            if(this.row < 1) {
+                this.row = 1;
             }
             break;
         case "down":
             this.row++;
-            if(this.row > 5) {
-                this.row = 5;
+            if(this.row > 6) {
+                this.row = 6;
             }
             break;
     }
@@ -86,11 +87,18 @@ Player.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     var new_x   = (this.col - 1) * 101,
-        new_y   = (this.row - 1) * 83 + 60;
+        new_y   = (this.row - 1) * 83 - 20;
 
     this.x += (new_x - this.x) * dt * this.vel;
     this.y += (new_y - this.y) * dt * this.vel;
 };
+
+// Reset player position if collide with enemy
+Player.prototype.reset = function ()
+{
+    this.col = 3;
+    this.row = 6;
+}
 
 
 // Enemies our player must avoid
@@ -112,7 +120,7 @@ Enemy.prototype.constructor = Enemy;
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var allEnemies = [new Enemy(300, 1), new Enemy(150, 2), new Enemy(200, 3)];
+var allEnemies = [new Enemy(100, 2), new Enemy(150, 3), new Enemy(200, 4)];
 var player = new Player();
 
 
@@ -128,3 +136,19 @@ document.addEventListener("keyup", function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+var GameText = function () {
+    
+};
+
+GameText.prototype.update = function(dt) {
+
+};
+
+GameText.prototype.render = function () {
+
+};
+
+GameText.prototype.modifyText = function () {
+
+};
