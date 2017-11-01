@@ -47,6 +47,7 @@ var Player = function () {
     this.life = 3;
     this.life_sprite = "images/Heart.png";
     this.score = 0;
+    this.finish = false;
 };
 
 // Map Character prototypes to Player
@@ -89,6 +90,8 @@ Player.prototype.handleInput = function (keyCode) {
             }
             break;
     }
+    document.getElementById("pr").textContent = this.row;
+    document.getElementById("pc").textContent = this.col;
 };
 // Update the players's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -101,11 +104,16 @@ Player.prototype.update = function(dt) {
 
     this.x += (new_x - this.x) * dt * this.vel;
     this.y += (new_y - this.y) * dt * this.vel;
-    
+};
+
+// Reset player position 
+Player.prototype.reset = function (){
+    this.col = 3;
+    this.row = 6;
 };
 
 // Reset player position if collide with enemy
-Player.prototype.reset = function (){
+Player.prototype.die = function (){
     this.col = 3;
     this.row = 6;
     this.life--;
@@ -117,8 +125,8 @@ Player.prototype.render = function () {
         var img = Resources.get(this.life_sprite);
         ctx.drawImage( img, 5 + 30 * i, 10, img.width * 0.28, img.height * 0.28);
     }
-    var img = Resources.get("images/Star.png");
-    ctx.drawImage(img, 350, -10,  img.width * 0.40, img.height * 0.40);
+    var img2 = Resources.get("images/Star.png");
+    ctx.drawImage(img2, 350, -10,  img2.width * 0.40, img2.height * 0.40);
     ctx.fillStyle = "white";
     ctx.font = "42px Indie Flower";
     ctx.fillText(this.score.toString(), 400, 45);
@@ -171,33 +179,55 @@ var timeText =  {
         ctx.fillStyle = "white";
         ctx.font = "32px Henny Penny";
         var minutes = Math.floor(this.timeLeft / 60);
-        var seconds = Math.floor(this.timeLeft - minutes * 60);
+        var seconds = Math.ceil(this.timeLeft - minutes * 60);
         var displayTime = minutes.toString()+":"+seconds.toString();
         ctx.fillText(displayTime.toString(), 215, 45);
     }
 };
 
 var collectibles = {
-    sprite : ["images/Gem Blue.png", "images/Gem Green.png", "images/Gem Orange.png"],
-    selected_sprite : getRandomInt(0, 2),
-    location: [getRandomInt(1,6), getRandomInt(1,5)],
+    sprite : ["images/Gem Blue.png", "images/Gem Green.png", "images/Gem Orange.png", "images/Star.png"],
+    selected_sprite : getRandomInt(0, 3),
+    location: [0,0],
+    star_loc: [1, getRandomInt(1,6)],
     display: false,
+    time_elapsed: 0,
+    timeToNextGem: getRandomInt(1,100)%11 + 4,
     render: function() {
-        var x   = (this.location[0] - 1) * 101,
-            y   = (this.location[1] - 1) * 83 - 20,
+        var x   = (this.location[1] - 1) * 101 + 20,
+            y   = (this.location[0] - 1) * 83 + 23,
             img = Resources.get(this.sprite[this.selected_sprite]);
+            img_star = Resources.get(this.sprite[3]);
+            x_star   = (this.star_loc[1] - 1) * 101 + 20;
+            y_star   = (this.star_loc[0] - 1) * 83 + 23;
         
-        if(this.display && !player.collected) {
+        if(this.display) {
             ctx.drawImage(img, x, y, img.width * 0.6, img.height * 0.6);
         }
+        //if(!player.finish) {
+            ctx.drawImage(img_star, x_star, y_star, img_star.width * 0.7, img_star.height * 0.7);
+        //}
     },
-    update: function(current_score) {
-        if (player.score > 10 && !this.display) {
-            display = true;            
+    update: function(dt) {
+        this.time_elapsed += dt;
+        this.collected();
+        if (this.time_elapsed > this.timeToNextGem && !this.display) {
+            this.display = true;   
+            this.selected_sprite = getRandomInt(0, 3);    
+            this.location= [getRandomInt(2,6), getRandomInt(2,6)];
+            document.getElementById("gr").textContent = this.location[0];
+            document.getElementById("gc").textContent = this.location[1];
         }
-
+    },
+    collected: function() {
+        if (player.row === this.location[0] && player.col === this.location[1]) {
+            this.display = false;
+            player.score += this.selected_sprite + 2;
+            this.location = [0,0];
+            this.time_elapsed = 0;
+            this.timeToNextGem = getRandomInt(4,11);
+        }
     }
-
 };
 
 function getRandomInt(min, max) {
@@ -206,16 +236,21 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
 
-var playerRowEvent = new CustomEvent("playerRowChanged", {
-    bubbles: true
-});
-var playerColEvent = new CustomEvent("playerColChanged", {
+var playerEvent = new CustomEvent("locationChanged", {
     bubbles: true
 });
 
-document.addEventListener("playerRowChanged", function(evt) {
-    if(player.row === 1) {
+
+document.addEventListener("locationChanged", function(evt) {
+    if(player.col === collectibles.star_loc[1] && player.row === collectibles.star_loc[0]) {
         player.score++;
+        collectibles.star_loc[1] = getRandomInt(1,100)%5+1;
+        if(collectibles.star_loc[0] == 1) {
+            collectibles.star_loc[0] = 6;
+        } else {
+            collectibles.star_loc[0] = 1;
+        }
+        //player.reset();
     }
 });
 

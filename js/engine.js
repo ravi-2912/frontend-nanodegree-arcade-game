@@ -79,7 +79,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        checkCollisions();
+        //checkCollisions();
     }
 
     /* This is called by the update function and loops through all of the
@@ -93,8 +93,10 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        player.update(dt);
+        
         timeText.update(dt);
+        collectibles.update(dt);
+        player.update(dt);
     }
 
     /* This checks collision between players and enemies and collectibles,
@@ -105,7 +107,7 @@ var Engine = (function(global) {
             if (enemy.row === (player.row )) {
                 var dist = player.x - enemy.x;
                 if (dist < 90 && dist > 0) {
-                    player.reset();
+                    player.die();
                 }
             }
         });
@@ -124,11 +126,11 @@ var Engine = (function(global) {
         ctx.fillStyle = "#1f1f1f";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         var rowImages = [
-                "images/water-block.png",   // Top row is water
+                "images/grass-block.png",   // Top row is water
                 "images/stone-block.png",   // Row 1 of 3 of stone
                 "images/stone-block.png",   // Row 2 of 3 of stone
                 "images/stone-block.png",   // Row 3 of 3 of stone
-                "images/grass-block.png",   // Row 1 of 2 of grass
+                "images/stone-block.png",   // Row 1 of 2 of grass
                 "images/grass-block.png"    // Row 2 of 2 of grass
             ],
             numRows = 6,
@@ -167,8 +169,10 @@ var Engine = (function(global) {
             enemy.render();
         });
 
+        collectibles.render();
         player.render();
         timeText.render();
+        
     }
 
     /* This function does nothing but it could have been a good place to
@@ -190,7 +194,10 @@ var Engine = (function(global) {
         "images/enemy-bug.png",
         "images/char-boy.png",
         "images/Heart.png",
-        "images/Star.png"
+        "images/Star.png",
+        "images/Gem Blue.png",
+        "images/Gem Green.png",
+        "images/Gem Orange.png"
     ]);
     Resources.onReady(init);
 
