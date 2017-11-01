@@ -94,10 +94,10 @@ var Engine = (function(global) {
             enemy.update(dt);
         });
         
-        timeText.update(dt);
+        
         player.update(dt);
         collectibles.update(dt);
-        
+        timeText.update(dt);
     }
 
     /* This checks collision between players and enemies and collectibles,
