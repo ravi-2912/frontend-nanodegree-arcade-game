@@ -187,12 +187,12 @@ var timeText =  {
 
 var collectibles = {
     sprite : ["images/Gem Blue.png", "images/Gem Green.png", "images/Gem Orange.png", "images/Star.png"],
-    selected_sprite : getRandomInt(0, 3),
+    selected_sprite : getRandomInt(1, 100)%3,
     location: [0,0],
-    star_loc: [1, getRandomInt(1,6)],
+    star_loc: [1, getRandomInt(1,100)%5+1],
     display: false,
     time_elapsed: 0,
-    timeToNextGem: getRandomInt(1,100)%11 + 4,
+    timeToNextGem: getRandomInt(1,100)%7 + 2,
     render: function() {
         var x   = (this.location[1] - 1) * 101 + 20,
             y   = (this.location[0] - 1) * 83 + 23,
@@ -213,8 +213,8 @@ var collectibles = {
         this.collected();
         if (this.time_elapsed > this.timeToNextGem && !this.display) {
             this.display = true;   
-            this.selected_sprite = getRandomInt(0, 3);    
-            this.location= [getRandomInt(2,6), getRandomInt(2,6)];
+            this.selected_sprite = getRandomInt(1, 100)%3;    
+            this.location= [getRandomInt(1,100)%4+2, getRandomInt(1,100)%4+2];
             document.getElementById("gr").textContent = this.location[0];
             document.getElementById("gc").textContent = this.location[1];
         }
@@ -228,6 +228,10 @@ var collectibles = {
             this.timeToNextGem = getRandomInt(4,11);
         }
     }
+};
+
+var blockers = function () {
+
 };
 
 function getRandomInt(min, max) {
