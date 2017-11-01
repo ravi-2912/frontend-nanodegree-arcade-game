@@ -15,3 +15,9 @@ p {
     font-family: 'Irish Grover', cursive;
     font-family: 'Henny Penny', cursive;
 }
+
+#loc p {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    font-size: 18px;
+}
