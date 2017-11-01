@@ -95,8 +95,9 @@ var Engine = (function(global) {
         });
         
         timeText.update(dt);
-        collectibles.update(dt);
         player.update(dt);
+        collectibles.update(dt);
+        
     }
 
     /* This checks collision between players and enemies and collectibles,
@@ -169,8 +170,9 @@ var Engine = (function(global) {
             enemy.render();
         });
 
-        collectibles.render();
         player.render();
+        collectibles.render();
+        
         timeText.render();
         
     }
@@ -193,6 +195,10 @@ var Engine = (function(global) {
         "images/grass-block.png",
         "images/enemy-bug.png",
         "images/char-boy.png",
+        "images/char-cat-girl.png",
+        "images/char-horn-girl.png",
+        "images/char-pink-girl.png",
+        "images/char-princess-girl.png",
         "images/Heart.png",
         "images/Star.png",
         "images/Gem Blue.png",
