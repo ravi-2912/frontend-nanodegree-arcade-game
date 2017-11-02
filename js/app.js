@@ -239,10 +239,14 @@ var collectibles = {
             var alpha_star = 1;
             if(this.star_collected) {
                 var dt_star = (Date.now() - this.t_star_stop);
-                //alpha_star = 1.0 - 0.001 * dt_star;
-                x_star -= (x_star-350)*(0.001 * dt_star);
-                y_star -= (y_star+10)*(0.001 * dt_star);
-                scale_star -= 0;
+                alpha_star = 1.0 - 0.001 * dt_star;
+                if(x_star != 350 && y_star != -10) {
+                    var theta = Math.atan((-10-y_star)/(350-x_star));
+                    x_star += (350-x_star)*(0.002 * dt_star)*Math.cos(theta);
+                    y_star += (-10-y_star)*(0.002 * dt_star)*Math.sin(theta);
+                
+                    scale_star -= 0;
+                }
                 if (alpha_star <= 0.01) {
                     this.star_collected = false;
                     this.star_loc[1] = getRandomInt(1,100)%5+1;
