@@ -42,12 +42,13 @@ var Player = function () {
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-    Character.call(this, "images/char-boy.png", 4, 6, 3);
+    this.sprite_imgs = ["images/char-boy.png", "images/char-cat-girl.png", "images/char-horn-girl.png", "images/char-pink-girl.png", "images/char-princess-girl.png"];
+    Character.call(this, this.sprite_imgs[this.level], 4, 6, 3);
     this.y = (this.row - 1) * 83 - 20;
     this.life = 3;
     this.life_sprite = "images/Heart.png";
     this.score = 0;
-    this.finish = false;
+    this.level = 0;
 };
 
 // Map Character prototypes to Player
@@ -104,6 +105,20 @@ Player.prototype.update = function(dt) {
 
     this.x += (new_x - this.x) * dt * this.vel;
     this.y += (new_y - this.y) * dt * this.vel;
+
+    if(this.score >5) {
+        this.level = 1;
+    } 
+    if (this.score > 10) {
+        this.level = 2;
+    } 
+    if (this.score > 15) {
+        this.level = 3;
+    } 
+    if  (this.score >20) {
+        this.level = 4;
+    }
+    this.sprite = this.sprite_imgs[this.level];
 };
 
 // Reset player position 
@@ -191,26 +206,65 @@ var collectibles = {
     location: [0,0],
     star_loc: [1, getRandomInt(1,100)%5+1],
     display: false,
+    display_star: true,
     time_elapsed: 0,
     timeToNextGem: getRandomInt(1,100)%7 + 2,
+    collected: false,
+    star_collected: false,
     render: function() {
         var x   = (this.location[1] - 1) * 101 + 20,
             y   = (this.location[0] - 1) * 83 + 23,
             img = Resources.get(this.sprite[this.selected_sprite]);
             img_star = Resources.get(this.sprite[3]);
             x_star   = (this.star_loc[1] - 1) * 101 + 20;
-            y_star   = (this.star_loc[0] - 1) * 83 + 23;
+            y_star   = (this.star_loc[0] - 1) * 83 + 23,
+            scale_star = 0.7;
         
-        if(this.display) {
+        if(this.display || this.collected) {
+            var alpha = 1;
+            if(this.collected) {
+                var dt = (Date.now() - this.t_stop);
+                alpha = 1.0 - 0.001 * dt;
+                if (alpha <= 0.01) {
+                    this.collected = false;
+                    this.location=[0,0];
+                }
+            }
+            ctx.globalAlpha = alpha;
             ctx.drawImage(img, x, y, img.width * 0.6, img.height * 0.6);
+            ctx.globalAlpha = 1.0;
+        }
+        
+        if(this.display_star || this.star_collected) {
+            var alpha_star = 1;
+            if(this.star_collected) {
+                var dt_star = (Date.now() - this.t_star_stop);
+                //alpha_star = 1.0 - 0.001 * dt_star;
+                x_star -= (x_star-350)*(0.001 * dt_star);
+                y_star -= (y_star+10)*(0.001 * dt_star);
+                scale_star -= 0;
+                if (alpha_star <= 0.01) {
+                    this.star_collected = false;
+                    this.star_loc[1] = getRandomInt(1,100)%5+1;
+                    if(this.star_loc[0] == 1) {
+                        this.star_loc[0] = 6;
+                    } else {
+                        this.star_loc[0] = 1;
+                    }
+                    this.display_star = true;
+                }
+            }
+            ctx.globalAlpha = alpha_star;
+            ctx.drawImage(img_star, x_star, y_star, img_star.width * 0.7, img_star.height * 0.7);
+            ctx.globalAlpha = 1.0;
         }
         //if(!player.finish) {
-            ctx.drawImage(img_star, x_star, y_star, img_star.width * 0.7, img_star.height * 0.7);
+        //ctx.drawImage(img_star, x_star, y_star, img_star.width * 0.7, img_star.height * 0.7);
         //}
     },
     update: function(dt) {
         this.time_elapsed += dt;
-        this.collected();
+        this.checkCollected(dt);
         if (this.time_elapsed > this.timeToNextGem && !this.display) {
             this.display = true;   
             this.selected_sprite = getRandomInt(1, 100)%3;    
@@ -219,18 +273,22 @@ var collectibles = {
             document.getElementById("gc").textContent = this.location[1];
         }
     },
-    collected: function() {
-        if (player.row === this.location[0] && player.col === this.location[1]) {
+    checkCollected: function(dt) {
+        if (player.row === this.location[0] && player.col === this.location[1] && !this.collected) {
             this.display = false;
             player.score += this.selected_sprite + 2;
-            this.location = [0,0];
             this.time_elapsed = 0;
-            this.timeToNextGem = getRandomInt(4,11);
+            this.timeToNextGem = getRandomInt(1,100)%7 + 2;
+            this.collected = true;
+            this.t_stop = Date.now();
         }
     }
 };
 
-var blockers = function () {
+var blockers = {
+    level: 1,
+    number: getRandomInt(1,100)%(player.level+1),
+    sprite: ["images/stone-block.png", "images/water-block.png"]
 
 };
 
@@ -248,12 +306,15 @@ var playerEvent = new CustomEvent("locationChanged", {
 document.addEventListener("locationChanged", function(evt) {
     if(player.col === collectibles.star_loc[1] && player.row === collectibles.star_loc[0]) {
         player.score++;
-        collectibles.star_loc[1] = getRandomInt(1,100)%5+1;
-        if(collectibles.star_loc[0] == 1) {
+        //collectibles.star_loc[1] = getRandomInt(1,100)%5+1;
+        collectibles.display_star = false;
+        collectibles.star_collected = true;
+        collectibles.t_star_stop = Date.now();
+        /*if(collectibles.star_loc[0] == 1) {
             collectibles.star_loc[0] = 6;
         } else {
             collectibles.star_loc[0] = 1;
-        }
+        }*/
         //player.reset();
     }
 });
