@@ -197,7 +197,9 @@ var Enemy = function (vel = 100, row = 1) {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     Character.call(this, "images/enemy-bug.png", vel, row, -1);
-
+    this.timetoupdate = 10;
+    this.speed = [150, 200, 250, 300, 350];
+    this.increment = [0, 30, 60, 90];
 };
 
 // Map Character prototypes to Enemy
@@ -205,11 +207,22 @@ Enemy.prototype = Object.create(Character.prototype);
 // Enemy constructor definition
 Enemy.prototype.constructor = Enemy;
 
+Enemy.prototype.update = function (dt) {
+    Character.prototype.update.call(this,dt);
+    this.timetoupdate -= dt;
+    
+    if(this.timetoupdate <=0) {
+        this.timetoupdate = 10;        
+        var sp = getRandomInt(1,100)%this.speed.length;
+        this.speed[sp] += this.increment[getRandomInt(1,100)%this.increment.length];
+        this.vel = this.speed[sp];
+    }
+};
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var allEnemies = [new Enemy(100, 2), new Enemy(150, 3), new Enemy(200, 4)];
+var allEnemies = [new Enemy(250, 2), new Enemy(200, 3), new Enemy(250, 4), new Enemy(100, 5)];
 var player = new Player();
 
 
@@ -306,9 +319,6 @@ var collectibles = {
             ctx.drawImage(img_star, x_star, y_star, img_star.width * scale_star, img_star.height * scale_star);
             ctx.globalAlpha = 1.0;
         }
-        //if(!player.finish) {
-        //ctx.drawImage(img_star, x_star, y_star, img_star.width * 0.7, img_star.height * 0.7);
-        //}
     },
     update: function (dt) {
         this.time_elapsed += dt;
@@ -337,6 +347,7 @@ var blockers = {
     level: 1,
     number: getRandomInt(1, 100) % (player.level + 1),
     sprite: ["images/stone-block.png", "images/water-block.png"]
+    // TODO : write code
 
 };
 
@@ -353,16 +364,8 @@ var playerEvent = new CustomEvent("locationChanged", {
 
 document.addEventListener("locationChanged", function (evt) {
     if (player.col === collectibles.star_loc[1] && player.row === collectibles.star_loc[0]) {
-
-        //collectibles.star_loc[1] = getRandomInt(1,100)%5+1;
         collectibles.display_star = false;
         collectibles.star_collected = true;
         collectibles.t_star_stop = Date.now();
-        /*if(collectibles.star_loc[0] == 1) {
-            collectibles.star_loc[0] = 6;
-        } else {
-            collectibles.star_loc[0] = 1;
-        }*/
-        //player.reset();
     }
 });
