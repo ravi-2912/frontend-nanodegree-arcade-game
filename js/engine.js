@@ -130,7 +130,7 @@ var Engine = (function(global) {
         ctx.fillStyle = "#1f1f1f";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         var rowImages = [
-                "images/grass-block.png",   // Top row is water
+                "images/water-block.png",   // Top row is water
                 "images/stone-block.png",   // Row 1 of 3 of stone
                 "images/stone-block.png",   // Row 2 of 3 of stone
                 "images/stone-block.png",   // Row 3 of 3 of stone
