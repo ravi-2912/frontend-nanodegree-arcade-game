@@ -51,14 +51,14 @@ var Player = function () {
     // Store when player is levelled up
     this.level_time = Date.now();
     // Player sprites based on levels
-    this.sprite_imgs = ["images/char-boy.png", "images/char-cat-girl.png", "images/char-horn-girl.png", 
+    this.sprite_imgs = ["images/char-boy.png", "images/char-cat-girl.png", "images/char-horn-girl.png",
                         "images/char-pink-girl.png", "images/char-princess-girl.png"];
     Character.call(this, this.sprite_imgs[this.level], 4, 6, 3);
     this.y = (this.row - 1) * 83 - 20;
     // Player life
     this.life = 3;
     // Player score
-    this.score = 0;    
+    this.score = 0;
     // sign for increasing or decreasing alpha channel while rendering for Selector.png
     this.sign = -1;
     // Display alpha for Selector.png
@@ -72,9 +72,9 @@ Player.prototype.constructor = Player;
 /**
  * @description Handle user keyboard input to move the player
  * @param {string} keyCode - User key press
- */ 
+ */
 Player.prototype.handleInput = function (keyCode) {
-    // Udated the location (row, column) fpr the player, 
+    // Udated the location (row, column) fpr the player,
     // check if location update results in going outside canvas,
     // and fire the playerLocationChanged event.
     switch (keyCode) {
@@ -121,7 +121,7 @@ Player.prototype.update = function (dt) {
     // Compute new postion
     var new_x = (this.col - 1) * 101,
         new_y = (this.row - 1) * 83 - 20;
-    
+
     // Animate to new position from existing
     this.x += (new_x - this.x) * dt * this.vel;
     this.y += (new_y - this.y) * dt * this.vel;
@@ -156,7 +156,7 @@ Player.prototype.update = function (dt) {
 };
 
 /**
- * @description Reset player position 
+ * @description Reset player position
  */
 Player.prototype.reset = function () {
     this.col = 3;
@@ -192,7 +192,7 @@ Player.prototype.render = function () {
         // Calculate time from level up is done
         var dt = Date.now() - this.level_time;
 
-        // Adjust sign to positive or negative which will help in modifying 
+        // Adjust sign to positive or negative which will help in modifying
         // the Selector.png alpha channel while rendering
         if (this.selector_alpha <= 0.2) {
             // Sign to increase the alpha
@@ -208,13 +208,13 @@ Player.prototype.render = function () {
         ctx.globalAlpha = this.selector_alpha;
         ctx.drawImage(Resources.get("images/Selector.png"), 200, 400);
         ctx.globalAlpha = 1;
-        
+
         // Reset location
         this.reset();
 
         // Wait for 2 seconds
         if (dt > 2000) {
-            // Level up process finished, and now time to get 
+            // Level up process finished, and now time to get
             // out of the parent if scope
             this.level_up = false;
             // Add score and time (because of reset)
@@ -229,7 +229,7 @@ Player.prototype.render = function () {
 
     // Render Heart.png using life left
     var img = Resources.get("images/Heart.png");
-    for (var i = 0; i < this.life; i++) {        
+    for (var i = 0; i < this.life; i++) {
         ctx.drawImage(img, 5 + 35 * i, -5, img.width * 0.35, img.height * 0.35);
     }
 
@@ -296,7 +296,7 @@ var player = new Player();
 
 /**
  * @description Event function for "keyup" event listener
- * @param {Object} e - Event object 
+ * @param {Object} e - Event object
  */
 function playerInputEvent(e) {
     var allowedKeys = {
@@ -346,12 +346,12 @@ var collectibles = {
     // Select what gem to display
     selected_sprite: getRandomInt(1, 100) % 3,
     // Gem location
-    location: [0, 0],    
+    location: [0, 0],
     // Gem display flag
-    display: false,    
+    display: false,
     // Time elapsed after gem collectted
-    time_elapsed: 0,    
-    // Time to display next gem after collecting previous 
+    time_elapsed: 0,
+    // Time to display next gem after collecting previous
     timeToNextGem: getRandomInt(1, 100) % 7 + 2,
     // Gem collected flag
     collected: false,
@@ -390,10 +390,10 @@ var collectibles = {
                 alpha -= 0.001 * dt;
 
                 // If alpha reaches low enough then consider
-                // gem is collected and hidden, then reset 
+                // gem is collected and hidden, then reset
                 if (alpha <= 0.01) {
                     alpha = 0;
-                    this.display = this.collected = false;                    
+                    this.display = this.collected = false;
                     //this.location = [0, 0];
                 }
             }
@@ -423,11 +423,11 @@ var collectibles = {
                 if (scale_star <= 0.41) {
                     // Update player score and reset it back to starting point
                     player.score++;
-                    player.reset();                                    
+                    player.reset();
                     // Set star flags and update column location
                     this.star_collected = false;
                     this.star_display = true;
-                    this.star_loc[1] = getRandomInt(1, 100) % 5 + 1;  
+                    this.star_loc[1] = getRandomInt(1, 100) % 5 + 1;
                 }
             }
             //ctx.globalAlpha = alpha_star;
@@ -469,7 +469,7 @@ var blockers = {
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min; 
+    return Math.floor(Math.random() * (max - min)) + min;
 }
 
 // Custom event for player location changed
@@ -500,12 +500,12 @@ document.addEventListener("playerLocationChanged", function (evt) {
         // set flags
         collectibles.display = false;
         collectibles.collected = true;
-        
+
         // set time
         collectibles.time_elapsed = 0;
         collectibles.collected_time = Date.now();
-        collectibles.timeToNextGem = getRandomInt(1, 100) % 7 + 2;  
-        
+        collectibles.timeToNextGem = getRandomInt(1, 100) % 7 + 2;
+
     }
 });
 
