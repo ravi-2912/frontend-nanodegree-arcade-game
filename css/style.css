@@ -10,14 +10,33 @@ canvas {
 
 p {
     font-family: 'Indie Flower', cursive;
-    font-family: 'Shrikhand', cursive;
+    /*font-family: 'Shrikhand', cursive;
     font-family: 'Miltonian Tattoo', cursive;
     font-family: 'Irish Grover', cursive;
-    font-family: 'Henny Penny', cursive;
+    font-family: 'Henny Penny', cursive;*/
 }
 
 #loc p {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: white;
     font-size: 18px;
+}
+
+.game-over {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 505px;
+    height: 606px;
+    padding-top: 50px;
+    background: rgba(0,0,0,0.9);
+    border-radius: 10px;
+    color: limegreen;
+    display: none;
+}
+
+.game-over h1 {
+    font-family: 'Miltonian Tattoo', cursive;
+    font-size: 68px;
 }
