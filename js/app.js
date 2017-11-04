@@ -441,7 +441,7 @@ var collectibles = {
     update: function (dt) {
         // Update time elapsed
         this.time_elapsed += dt;
-        //this.checkCollected(dt);
+
         // Check if alloted time has elapsed for next gem and that the display flag is set to false
         if (this.time_elapsed > this.timeToNextGem && !this.display) {
             this.display = true;
@@ -451,25 +451,14 @@ var collectibles = {
             this.location = [getRandomInt(1, 100) % 4 + 2, getRandomInt(1, 100) % 4 + 2];
         }
     },
-    // TODO: remove function below
-    checkCollected: function (dt) {
-        /*if (player.row === this.location[0] && player.col === this.location[1] && !this.collected) {
-            this.display = false;
-            player.score += this.selected_sprite + 2;
-            this.time_elapsed = 0;
-            this.timeToNextGem = getRandomInt(1, 100) % 7 + 2;
-            this.collected = true;
-            this.t_stop = Date.now();
-        }*/
-    }
 };
 
-// TODO: Implement blockers
+// TODO: Implement blockers.
 var blockers = {
     level: 1,
     number: getRandomInt(1, 100) % (player.level + 1),
     sprite: "images/stone-block.png",
-    // TODO: write code for stone blocks to appear and manage player movement
+    // TODO: write code for stone blocks to appear and manage player movement.
 };
 
 /**
