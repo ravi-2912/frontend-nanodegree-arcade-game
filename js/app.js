@@ -51,8 +51,8 @@ var Player = function () {
     // Store when player is levelled up
     this.level_time = Date.now();
     // Player sprites based on levels
-    this.sprite_imgs = ["images/char-boy.png", "images/char-cat-girl.png", "images/char-horn-girl.png",
-                        "images/char-pink-girl.png", "images/char-princess-girl.png"];
+    this.sprite_imgs = ['images/char-boy.png', 'images/char-cat-girl.png', 'images/char-horn-girl.png',
+                        'images/char-pink-girl.png', 'images/char-princess-girl.png'];
     Character.call(this, this.sprite_imgs[this.level], 4, 6, 3);
     this.y = (this.row - 1) * 83 - 20;
     // Player life
@@ -78,7 +78,7 @@ Player.prototype.handleInput = function (keyCode) {
     // check if location update results in going outside canvas,
     // and fire the playerLocationChanged event.
     switch (keyCode) {
-        case "left":
+        case 'left':
             this.col--;
             if (this.col < 1) {
                 this.col = 1;
@@ -86,7 +86,7 @@ Player.prototype.handleInput = function (keyCode) {
                 document.dispatchEvent(playerEvent);
             }
             break;
-        case "right":
+        case 'right':
             this.col++;
             if (this.col > 5) {
                 this.col = 5;
@@ -94,7 +94,7 @@ Player.prototype.handleInput = function (keyCode) {
                 document.dispatchEvent(playerEvent);
             }
             break;
-        case "up":
+        case 'up':
             this.row--;
             if (this.row < 1) {
                 this.row = 1;
@@ -102,7 +102,7 @@ Player.prototype.handleInput = function (keyCode) {
                 document.dispatchEvent(playerEvent);
             }
             break;
-        case "down":
+        case 'down':
             this.row++;
             if (this.row > 6) {
                 this.row = 6;
@@ -176,9 +176,9 @@ Player.prototype.die = function () {
  */
 Player.prototype.gameOver = function () {
     // Remove player input event
-    document.removeEventListener("keyup", playerInputEvent);
+    document.removeEventListener('keyup', playerInputEvent);
     // Show game over screen
-    document.getElementsByClassName("game-over")[0].style.display = "block";
+    document.getElementsByClassName('game-over')[0].style.display = 'block';
     // Set timer to zero
     timeText.timeLeft = 0;
 };
@@ -206,7 +206,7 @@ Player.prototype.render = function () {
         // Modify alpha based on sign change above and render
         this.selector_alpha += this.sign * (1 / 5000) * (dt % 500);
         ctx.globalAlpha = this.selector_alpha;
-        ctx.drawImage(Resources.get("images/Selector.png"), 200, 400);
+        ctx.drawImage(Resources.get('images/Selector.png'), 200, 400);
         ctx.globalAlpha = 1;
 
         // Reset location
@@ -228,18 +228,18 @@ Player.prototype.render = function () {
     Character.prototype.render.call(this);
 
     // Render Heart.png using life left
-    var img = Resources.get("images/Heart.png");
+    var img = Resources.get('images/Heart.png');
     for (var i = 0; i < this.life; i++) {
         ctx.drawImage(img, 5 + 35 * i, -5, img.width * 0.35, img.height * 0.35);
     }
 
     // Render score star
-    var img2 = Resources.get("images/Star.png");
+    var img2 = Resources.get('images/Star.png');
     ctx.drawImage(img2, 350, -10, img2.width * 0.40, img2.height * 0.40);
 
     // Render score number
-    ctx.fillStyle = "white";
-    ctx.font = "42px Indie Flower";
+    ctx.fillStyle = 'white';
+    ctx.font = '42px Indie Flower';
     ctx.fillText(this.score.toString(), 400, 45);
 };
 
@@ -251,7 +251,7 @@ Player.prototype.render = function () {
  * @param {number} row - Location row
  */
 var Enemy = function (vel, row) {
-    Character.call(this, "images/enemy-bug.png", vel, row, -1);
+    Character.call(this, 'images/enemy-bug.png', vel, row, -1);
     this.timetoupdate = 10;
     // TODO: Enemy movement direction
 };
@@ -295,21 +295,21 @@ var allEnemies = [new Enemy(200, 2), new Enemy(150, 3), new Enemy(200, 4), new E
 var player = new Player();
 
 /**
- * @description Event function for "keyup" event listener
+ * @description Event function for 'keyup' event listener
  * @param {Object} e - Event object
  */
 function playerInputEvent(e) {
     var allowedKeys = {
-        37: "left",
-        38: "up",
-        39: "right",
-        40: "down"
+        37: 'left',
+        38: 'up',
+        39: 'right',
+        40: 'down'
     };
     // Send keys to Player.handleInput()
     player.handleInput(allowedKeys[e.keyCode]);
 }
 // This listens for key presses and sends the keys to playerInputEvent() above.
-document.addEventListener("keyup", playerInputEvent);
+document.addEventListener('keyup', playerInputEvent);
 
 /**
  * @description Object to display time left on the canvas screen
@@ -328,11 +328,11 @@ var timeText = {
      * @description Render time text in mm:ss.
      */
     render: function () {
-        ctx.fillStyle = "white";
-        ctx.font = "32px Henny Penny";
+        ctx.fillStyle = 'white';
+        ctx.font = '32px Henny Penny';
         var minutes = Math.floor(this.timeLeft / 60);
         var seconds = Math.floor(this.timeLeft - minutes * 60);
-        var displayTime = minutes.toString() + ":" + seconds.toString();
+        var displayTime = minutes.toString() + ':' + seconds.toString();
         ctx.fillText(displayTime.toString(), 215, 45);
     }
 };
@@ -342,7 +342,7 @@ var timeText = {
  */
 var collectibles = {
     // List of available collectible sprites
-    sprite: ["images/Gem Blue.png", "images/Gem Green.png", "images/Gem Orange.png"],
+    sprite: ['images/Gem Blue.png', 'images/Gem Green.png', 'images/Gem Orange.png'],
     // Select what gem to display
     selected_sprite: getRandomInt(1, 100) % 3,
     // Gem location
@@ -358,7 +358,7 @@ var collectibles = {
     // Gem collected time
     collected_time: 0,
     // Sprite for star.png
-    star_sprite: "images/Star.png",
+    star_sprite: 'images/Star.png',
     // Star collected flag
     star_collected: false,
     // Star lcoation (always in row 1 but varying column)
@@ -457,7 +457,7 @@ var collectibles = {
 var blockers = {
     level: 1,
     number: getRandomInt(1, 100) % (player.level + 1),
-    sprite: "images/stone-block.png",
+    sprite: 'images/stone-block.png',
     // TODO: write code for stone blocks to appear and manage player movement.
 };
 
@@ -473,7 +473,7 @@ function getRandomInt(min, max) {
 }
 
 // Custom event for player location changed
-var playerEvent = new CustomEvent("playerLocationChanged", {
+var playerEvent = new CustomEvent('playerLocationChanged', {
     // bubble up to the DOM tree
     bubbles: true
 });
@@ -481,7 +481,7 @@ var playerEvent = new CustomEvent("playerLocationChanged", {
 /**
  * @description Event listener for player loction changed
  */
-document.addEventListener("playerLocationChanged", function (evt) {
+document.addEventListener('playerLocationChanged', function (evt) {
     // Check if player location coincides with star location
     if (player.col === collectibles.star_loc[1] && player.row === collectibles.star_loc[0]) {
         // update flags
@@ -520,8 +520,8 @@ function restartGame() {
     player.reset();
 
     // reset game data
-    document.addEventListener("keyup", playerInputEvent);
-    document.getElementsByClassName("game-over")[0].style.display = "none";
+    document.addEventListener('keyup', playerInputEvent);
+    document.getElementsByClassName('game-over')[0].style.display = 'none';
     timeText.timeLeft = 120;
 
     // Reset enemy data

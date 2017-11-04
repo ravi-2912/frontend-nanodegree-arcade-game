@@ -6,7 +6,7 @@
  * A game engine works by drawing the entire game screen over and over, kind of
  * like a flipbook you may have created as a kid. When your player moves across
  * the screen, it may look like just that image/character is moving or being
- * drawn but that is not the case. What's really happening is the entire "scene"
+ * drawn but that is not the case. What's really happening is the entire 'scene'
  * is being drawn over and over, presenting the illusion of animation.
  *
  * This engine makes the canvas' context (ctx) object globally available to make 
@@ -20,13 +20,13 @@ var Engine = (function(global) {
      */
     var doc = global.document,
         win = global.window,
-        canvas = doc.createElement("canvas"),
-        ctx = canvas.getContext("2d"),
+        canvas = doc.createElement('canvas'),
+        ctx = canvas.getContext('2d'),
         lastTime;
 
     canvas.width = 505;
     canvas.height = 606;
-    doc.querySelector("div.game").appendChild(canvas);
+    doc.querySelector('div.game').appendChild(canvas);
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -117,7 +117,7 @@ var Engine = (function(global) {
         });
     }
 
-    /* This function initially draws the "game level", it will then call
+    /* This function initially draws the 'game level', it will then call
      * the renderEntities function. Remember, this function is called every
      * game tick (or loop of the game engine) because that's how games work -
      * they are flipbooks creating the illusion of animation but in reality
@@ -127,15 +127,15 @@ var Engine = (function(global) {
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */
-        ctx.fillStyle = "#1f1f1f";
+        ctx.fillStyle = '#1f1f1f';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         var rowImages = [
-                "images/water-block.png",   // Top row is water
-                "images/stone-block.png",   // Row 1 of 3 of stone
-                "images/stone-block.png",   // Row 2 of 3 of stone
-                "images/stone-block.png",   // Row 3 of 3 of stone
-                "images/stone-block.png",   // Row 1 of 2 of grass
-                "images/grass-block.png"    // Row 2 of 2 of grass
+                'images/water-block.png',   // Top row is water
+                'images/stone-block.png',   // Row 1 of 3 of stone
+                'images/stone-block.png',   // Row 2 of 3 of stone
+                'images/stone-block.png',   // Row 3 of 3 of stone
+                'images/stone-block.png',   // Row 1 of 2 of grass
+                'images/grass-block.png'    // Row 2 of 2 of grass
             ],
             numRows = 6,
             numCols = 5,
@@ -143,7 +143,7 @@ var Engine = (function(global) {
 
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
-         * portion of the "grid"
+         * portion of the 'grid'
          */
         for (row = 0; row < numRows; row++) {
             for (col = 0; col < numCols; col++) {
@@ -193,21 +193,21 @@ var Engine = (function(global) {
      * all of these images are properly loaded our game will start.
      */
     Resources.load([
-        "images/stone-block.png",
-        "images/water-block.png",
-        "images/grass-block.png",
-        "images/enemy-bug.png",
-        "images/char-boy.png",
-        "images/char-cat-girl.png",
-        "images/char-horn-girl.png",
-        "images/char-pink-girl.png",
-        "images/char-princess-girl.png",
-        "images/Heart.png",
-        "images/Star.png",
-        "images/Gem Blue.png",
-        "images/Gem Green.png",
-        "images/Gem Orange.png",
-        "images/Selector.png"
+        'images/stone-block.png',
+        'images/water-block.png',
+        'images/grass-block.png',
+        'images/enemy-bug.png',
+        'images/char-boy.png',
+        'images/char-cat-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-princess-girl.png',
+        'images/Heart.png',
+        'images/Star.png',
+        'images/Gem Blue.png',
+        'images/Gem Green.png',
+        'images/Gem Orange.png',
+        'images/Selector.png'
     ]);
     Resources.onReady(init);
 
