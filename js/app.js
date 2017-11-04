@@ -146,7 +146,9 @@ Player.prototype.die = function () {
 };
 
 Player.prototype.gameOver = function () {
-
+    document.removeEventListener("keyup", playerInputEvent);
+    document.getElementsByClassName("game-over")[0].style.display = "block";
+    timeText.timeLeft = 0;
 };
 
 Player.prototype.render = function () {
@@ -208,13 +210,13 @@ Enemy.prototype = Object.create(Character.prototype);
 Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.update = function (dt) {
-    Character.prototype.update.call(this,dt);
+    Character.prototype.update.call(this, dt);
     this.timetoupdate -= dt;
-    
-    if(this.timetoupdate <=0) {
-        this.timetoupdate = 10;        
-        var sp = getRandomInt(1,100)%this.speed.length;
-        this.speed[sp] += this.increment[getRandomInt(1,100)%this.increment.length];
+
+    if (this.timetoupdate <= 0) {
+        this.timetoupdate = 10;
+        var sp = getRandomInt(1, 100) % this.speed.length;
+        this.speed[sp] += this.increment[getRandomInt(1, 100) % this.increment.length];
         this.vel = this.speed[sp];
     }
 };
@@ -228,16 +230,16 @@ var player = new Player();
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
-document.addEventListener("keyup", function (e) {
+function playerInputEvent(e) {
     var allowedKeys = {
         37: "left",
         38: "up",
         39: "right",
         40: "down"
     };
-
     player.handleInput(allowedKeys[e.keyCode]);
-});
+}
+document.addEventListener("keyup", playerInputEvent);
 
 var timeText = {
     timeLeft: 120,
@@ -327,8 +329,6 @@ var collectibles = {
             this.display = true;
             this.selected_sprite = getRandomInt(1, 100) % 3;
             this.location = [getRandomInt(1, 100) % 4 + 2, getRandomInt(1, 100) % 4 + 2];
-            document.getElementById("gr").textContent = this.location[0];
-            document.getElementById("gc").textContent = this.location[1];
         }
     },
     checkCollected: function (dt) {
@@ -348,7 +348,6 @@ var blockers = {
     number: getRandomInt(1, 100) % (player.level + 1),
     sprite: ["images/stone-block.png", "images/water-block.png"]
     // TODO : write code
-
 };
 
 function getRandomInt(min, max) {
@@ -369,3 +368,16 @@ document.addEventListener("locationChanged", function (evt) {
         collectibles.t_star_stop = Date.now();
     }
 });
+
+function restartGame() {
+    player.life = 3;
+    player.level = 0;
+    player.score = 0;
+    document.addEventListener("keyup", playerInputEvent);
+    document.getElementsByClassName("game-over")[0].style.display = "none";
+    timeText.timeLeft = 120;
+    allEnemies.forEach(function (enemy) {
+        enemy.speed = [150, 200, 250, 300, 350];
+    });
+
+}
