@@ -1,5 +1,5 @@
 // Character superclass
-var Character = function (sprite, vel = 50, row = 1, col = 1) {
+var Character = function (sprite, vel, row, col) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
@@ -192,7 +192,7 @@ Player.prototype.render = function () {
 
 
 // Enemies our player must avoid
-var Enemy = function (vel = 100, row = 1) {
+var Enemy = function (vel, row) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
@@ -308,12 +308,8 @@ var collectibles = {
                 if (scale_star <= 0.41) {
                     player.score++;
                     this.star_collected = false;
-                    this.star_loc[1] = getRandomInt(1, 100) % 5 + 1;
-                    if (this.star_loc[0] == 1) {
-                        this.star_loc[0] = 6;
-                    } else {
-                        this.star_loc[0] = 1;
-                    }
+                    this.star_loc[1] = getRandomInt(1, 100) % 5 + 1;                    
+                    player.reset();
                     this.display_star = true;
                 }
             }
@@ -346,8 +342,8 @@ var collectibles = {
 var blockers = {
     level: 1,
     number: getRandomInt(1, 100) % (player.level + 1),
-    sprite: ["images/stone-block.png", "images/water-block.png"]
-    // TODO : write code
+    sprite: "images/stone-block.png",
+    // TODO: write code for stone blocks to appear and manage player movement
 };
 
 function getRandomInt(min, max) {
@@ -378,6 +374,7 @@ function restartGame() {
     timeText.timeLeft = 120;
     allEnemies.forEach(function (enemy) {
         enemy.speed = [150, 200, 250, 300, 350];
+        enemy.timetoupdate = 10;
     });
 
 }
