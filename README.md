@@ -10,8 +10,8 @@ Frogger arcade game developed in JavaScript (JS) using `requestAnimationFrame()`
 * Player collectible Gems and Stars.
 
 ### How to play
-* Use arrow keys to move up, down, left and right to avoid enemies.
-* Collect gems and stars to increase your score.
+* Use arrow keys :arrow_up::arrow_down::arrow_left::arrow_right: to move up, down, left and right to avoid enemies.
+* Collect gems :gem: and stars :star: to increase your score.
 * Aim to increase the total score.
 * Finish the game within 2 minutes.
 
@@ -40,7 +40,7 @@ Just download and open `index.html` in your browser. Make sure that the followin
 │   ├ Selector.png
 │   ├ Sar.png
 │   ├ stone-block.png
-│   └  water-block.png
+│   └ water-block.png
 └ index.html
 ```
 ### TODO List (`app.js`)
@@ -52,7 +52,7 @@ Just download and open `index.html` in your browser. Make sure that the followin
 - [ ] Line 537: Implement game pause.
 
 
-#### Udacity's Note
+#### Udacity's Project Note
 Students should use this [rubric](https://review.udacity.com/#!/projects/2696458597/rubric) for self-checking their submission. Make sure the functions you write are **object-oriented** - either class functions (like Player and Enemy) or class prototype functions such as Enemy.prototype.checkCollisions, and that the keyword 'this' is used appropriately within your class and class prototype functions to refer to the object the function is called upon. Also be sure that the **readme.md** file is updated with your instructions on both how to 1. Run and 2. Play your arcade game.
 
 For detailed instructions on how to get started, check out this [guide](https://docs.google.com/document/d/1v01aScPjSWCCWQLIpFqvg3-vXLH2e8_SZQKC8jNO0Dc/pub?embedded=true).
